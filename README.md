@@ -1,6 +1,6 @@
 # Monster's Grape
 
-Shengyi Liang, Mohao Yi, Chi Yu Yeh, Jie Yu, Haikuo Lu, Yuxuan Zhang
+Chi Yu Yeh, Shengyi Liang
 
 ### Packages: 
 pandas, tensorflow, numpy, yfinance, stockstats, matplotlib
