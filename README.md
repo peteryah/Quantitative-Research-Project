@@ -1,23 +1,29 @@
-# Monster's Grape
+# Quantitative research project 2019.5-2020.9
 
-Chi Yu Yeh, Shengyi Liang
+This repository contains the source code for the ranking algorithm that generates a ranked list of stocks from the S&P 500 list of the selected year.
+This repository is for admission review only. Please do not disclose any of the files within this repository.  
 
-### Packages: 
-pandas, tensorflow, numpy, yfinance, stockstats, matplotlib
+## Python Interface
+Pycharm is required to run this algorithm
 
-Code files:
+## Packages: 
+Pandas, tensorflow, numpy, yfinance, stockstats, matplotlib
 
-alp1.py: 82 available Alphas from World Quant
+## Code files:
 
-Alphas.py: Turn raw data into vectors of Alpha values
+Alp1.py: 82 Alphas (mathematical expressions and corresponding code)
+
+Alphas.py: Turn pricing data of selected stocks into vectors of Alpha values
 
 Generate.py: Generate a portfolio automatically
 
-Main.py: Backtest initiator in one click
+Main.py: Initializes parallelization, tackles data processing, and generates ranked List.
 
-Prediction.py: Portfolio making codes
+Prediction.py: Updates the portfolio by a given number of stocks from the top of the ranked list.
 
-Process.py: Classify stocks into 0 and 1
+Process.py: Sets criteria and train neural networks 
 
-Testing.py: Backtesting codes
+Testing.py: Backtests portfolio with long periods of time
+
+
 

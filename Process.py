@@ -17,12 +17,26 @@ import datetime
 from dateutil.relativedelta import relativedelta
 import matplotlib.pyplot as plt
 import alp1 # import alpha features in alp1.py
+import time as timi
+import warnings
+warnings.filterwarnings("ignore")
 
 def ProcessData(dist, choice):
     '''Prepare X and Y for model'''
-    
+    yx=timi.time()
+    print('Calculating alpha values......')
+    print('This may take up to 4.5 minutes......')
+    print()
     X = GetAlphasAll(dist)
+    yx2=timi.time()
+    xx=int(yx2-yx)/60
+    print('Calculation finished and took ' +str(xx)+' minutes')
+    yt=timi.time()
+    print('Starting to rate companies by 0 or 1......')
     Y = TrueYTransform(dist, choice)
+    yt2=timi.time()
+    yy=yt2-yt
+    print('Rating finished and took '+str(int(yy))+' secs')
     
     return X.copy(), Y.copy()
 
@@ -88,11 +102,13 @@ def choice1(dist):
 def choice2(dist, cut):
     '''Top x% pctr companies have Y = 1, others have Y = 0'''
     pctrs = {}
+    temp=''
     for i in dist.keys():
         pctrs[i] = GetAlphas(dist[i])['pctr']
+        temp=i
     #new = {}
-    #temp = pctrs['AES'].shape[0]  
-    indices = pctrs['MSFT'].index.values
+    #temp = pctrs['AES'].shape[0]
+    indices = pctrs[temp].index.values
     for j in range(len(indices)):
         allpctr = []
         availCompanies = []

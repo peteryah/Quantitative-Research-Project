@@ -17,18 +17,24 @@ import Testing2
 from dateutil.relativedelta import relativedelta
 import matplotlib.pyplot as plt
 import keras
+import time as t
+import warnings
+warnings.filterwarnings("ignore")
 
 def AvgedPredict(dist, X, Y, alphaIndex, n, portSize,date_str):
     '''Get averaged portfolio for future prediction'''
     res = []
-    indices = list(dist['GOOG'].index.values)
-    print('test')
+    for i in dist:
+        temp=i
+        break
+    indices = list(dist[temp].index.values)
+    #print('test')
     date_object = datetime.datetime.strptime(date_str, '%m-%d-%Y').date()
     today = np.datetime64(date_object - relativedelta(days = date_object.day-1))
-    print(today)
+    #print(today)
     st = indices[indices.index(today)-3]
     ed = indices[indices.index(today)-1]
-    print(X['MMM'].loc[st:ed])
+    #print(X['MMM'].loc[st:ed])
     raw = pd.DataFrame(dist['MMM'].loc[st:ed])
     processed = pd.DataFrame(X['MMM'].loc[st:ed])
     raw.to_excel('RawData'+str(ed)[:10]+'.xlsx')
@@ -42,28 +48,43 @@ def AvgedPredict(dist, X, Y, alphaIndex, n, portSize,date_str):
             inputY[i] = Y[i][indices.index(st):indices.index(ed)]
     tempX = splitterX2(inputX)
     tempY = splitterY2(inputY)
-    print(st, ed)
-    models = Testing2.AvgPort(tempX, tempY, alphaIndex,n)
+    #print(st, ed)
+    mm1=t.time()
+    modelss = Testing2.AvgPort(tempX, tempY, alphaIndex,n)
+    mm2=t.time()
+    mm=mm2-mm1
+    print('one training took: '+str(mm) +' sec')
     scores = []
+    m1=t.time()
     for i in dist:
         indices = list(dist[i].index.values)
         if (st in indices) and (ed in indices) and (today in indices):
-            b = Testing2.AvgScore(models, X, alphaIndex, st,ed,i)
+            b = Testing2.AvgScore(modelss, X, alphaIndex, st,ed,i)
+
             scores += [[b[-1][0], i]]
     scores.sort(reverse=True)
-    
+    sscores=scores.copy()
+    m2=t.time()
+    m=m2-m1
+    print('one model scoring took: '+str(m)+' sec')
     comps = []
+
+
+    shortcomp=len(scores)-portSize
+    scomps=[]
+    for i in range(shortcomp, len(scores)):
+        scomps+=[sscores[i][1]]
+
     i = 0
     j = 0
     while (len(comps)<portSize and i<len(scores)):
-        
-       
+
         comps += [scores[i][1]]
         j+=1
         i+=1
     c=pd.DataFrame(comps)
     c.to_excel('comps'+str(ed)[:10]+'.xlsx')
-    return comps, scores,processed
+    return comps, scomps
 
 def LatestPredict(dist, X, Y, alphaIndex, n):
     '''Return the result for current month'''
